@@ -22,22 +22,22 @@ export function MovieInfo({title, year, poster, imdbID, deleteMovie}) {
   const classes = useStyles();
 
   return (
-      <Grid item>
-        <Paper className={classes.paper}>
-          {poster !== 'N/A' && <img className={classes.img} alt={'Movie poster'} src={poster} />}
-          <Typography variant="h6">{title}</Typography>
-          <Typography variant="h6">({year})</Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            className={classes.button}
-            startIcon={<DeleteIcon />}
-            onClick={() => deleteMovie(imdbID)}
-          >
-            Delete
-          </Button>
-        </Paper>
-      </Grid>
+    <Grid item>
+      <Paper className={classes.paper}>
+        {poster !== 'N/A' && <img className={classes.img} alt={'Movie poster'} src={poster} />}
+        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6">({year})</Typography>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          className={classes.button}
+          startIcon={<DeleteIcon />}
+          onClick={() => deleteMovie(imdbID)}
+        >
+          Delete
+        </Button>
+      </Paper>
+    </Grid>
   );
 }

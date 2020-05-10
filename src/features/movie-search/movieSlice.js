@@ -35,7 +35,6 @@ export const getMovies = searchTerm => dispatch => {
   axios.get(`http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&s=${searchTerm}`)
     .then(response => {
       if(response.data.Response === 'True') {
-        console.log(response.data.Search);
         dispatch(processMovies(response.data.Search));
       } else {
         dispatch(processMovies([]));
