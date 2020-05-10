@@ -19,13 +19,16 @@ export const movieSlice = createSlice({
     getMoviesError: (state, action) => {
       state.error = action.payload;
     },
+    clearError: state => {
+      state.error = false;
+    },
     deleteMovie: (state, action) => {
       state.movies = state.movies.filter(movie => movie.imdbID !== action.payload);
     },
   },
 });
 
-export const { processMovies, getMoviesError, deleteMovie } = movieSlice.actions;
+export const { processMovies, getMoviesError, clearError, deleteMovie } = movieSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic.
 export const getMovies = searchTerm => dispatch => {
