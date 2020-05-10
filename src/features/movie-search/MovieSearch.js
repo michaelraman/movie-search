@@ -4,55 +4,88 @@ import {
   getMovies,
   deleteMovie,
   selectMovies,
+  selectError,
 } from './movieSlice';
 import { MovieInfo } from './MovieInfo';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Button, TextField } from '@material-ui/core';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
 export function MovieSearch() {
   const movies = useSelector(selectMovies);
-  console.log(movies);
+  const error = useSelector(selectError);
+
+  if (error !== false) {
+    alert('There was en error retrieving movies: '.concat(error));
+  }
+
   const dispatch = useDispatch();
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const deleteMovieById = imdbID => {
     dispatch(deleteMovie(imdbID));
   };
 
+  const handleSubmit = () => {
+    if (searchTerm === '') {
+      alert('Search term is required.');
+    } else {
+      dispatch(getMovies(searchTerm));
+    }
+  }
+
+  const classes = useStyles();
+
   return (
     <div>
       <div>
-        <input
-          aria-label="Submit"
+        <TextField
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
         />
-        <button
-          onClick={() =>
-            dispatch(getMovies(searchTerm))
-          }
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          className={classes.button}
+          startIcon={<ArrowForwardIcon />}
+          onClick={handleSubmit}
         >
           Submit
-        </button>
+      </Button>
       </div>
-      <div>
-        <Grid container spacing={2}>
-          {
-            movies
-              .filter(movie => movie.Deleted === false)
-              .map((movie, i) => {
-                return(
-                  <MovieInfo
-                    key = {i}
-                    title = {movie.Title}
-                    year = {movie.Year}
-                    poster = {movie.Poster}
-                    imdbID = {movie.imdbID}
-                    deleteMovie = {deleteMovieById}
-                  />
-                )
-              })
-          }
-        </Grid>
+      <div className={classes.root}>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justify="center"
+          >
+            {
+              movies.map((movie, i) => {
+                  return(
+                    <MovieInfo
+                      key = {i}
+                      title = {movie.Title}
+                      year = {movie.Year}
+                      poster = {movie.Poster}
+                      imdbID = {movie.imdbID}
+                      deleteMovie = {deleteMovieById}
+                    />
+                  )
+                })
+            }
+          </Grid>
       </div>
     </div>
   );

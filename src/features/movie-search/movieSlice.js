@@ -5,6 +5,7 @@ export const movieSlice = createSlice({
   name: 'movie',
   initialState: {
     movies: [],
+    error: false,
   },
   reducers: {
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -12,23 +13,19 @@ export const movieSlice = createSlice({
     // which detects changes to a "draft state" and produces a brand new
     // immutable state based off those changes
     processMovies: (state, action) => {
-      for (let i of action.payload) {
-        i.Deleted = false;
-      }
       state.movies = action.payload;
-      console.log(state.movies);
+      state.error = false;
+    },
+    getMoviesError: (state, action) => {
+      state.error = action.payload;
     },
     deleteMovie: (state, action) => {
-      for (let i of state.movies) {
-        if (i.imdbID === action.payload) {
-          i.Deleted = true;
-        }
-      }
+      state.movies = state.movies.filter(movie => movie.imdbID !== action.payload);
     },
   },
 });
 
-export const { processMovies, deleteMovie } = movieSlice.actions;
+export const { processMovies, getMoviesError, deleteMovie } = movieSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic.
 export const getMovies = searchTerm => dispatch => {
@@ -42,12 +39,14 @@ export const getMovies = searchTerm => dispatch => {
       }
     })
     .catch(error => {
-      console.log('Error getting movies: ', error);
+      console.log('Error getting movies: ', error.message);
+      dispatch(getMoviesError(error.message));
     });
 };
 
 // The function below is called a selector and allows us to select a value from
 // the state.
 export const selectMovies = state => state.movie.movies;
+export const selectError = state => state.movie.error;
 
 export default movieSlice.reducer;
