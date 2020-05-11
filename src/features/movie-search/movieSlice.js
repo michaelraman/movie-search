@@ -32,7 +32,7 @@ export const { processMovies, getMoviesError, clearError, deleteMovie } = movieS
 
 // The function below is called a thunk and allows us to perform async logic.
 export const getMovies = searchTerm => dispatch => {
-  axios.get(`http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_API_KEY}&s=${searchTerm}`)
+  axios.get(`/getMovies/${searchTerm}`)
     .then(response => {
       if(response.data.Response === 'True') {
         dispatch(processMovies(response.data.Search));
