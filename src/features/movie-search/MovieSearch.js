@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getMovies,
+  getMoreMovies,
   clearError,
   deleteMovie,
   selectMovies,
   selectError,
   selectResultsEmpty,
+  selectPageInfo,
 } from './movieSlice';
 import { MovieInfo } from './MovieInfo';
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,6 +40,7 @@ export function MovieSearch() {
   const movies = useSelector(selectMovies);
   const error = useSelector(selectError);
   const resultsEmpty = useSelector(selectResultsEmpty);
+  const pageInfo = useSelector(selectPageInfo);
 
   const dispatch = useDispatch();
 
@@ -146,6 +149,18 @@ export function MovieSearch() {
             {resultsEmpty && <div className={classes.text}>No movies found for your search</div>}
           </Grid>
       </div>
+
+      {/*Load more movies*/}
+      {(movies.length > 0 && pageInfo.currentPage < pageInfo.numPages) &&
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={() => dispatch(getMoreMovies(searchTerm))}
+        >
+          Load more movies
+        </Button>
+      }
     </div>
   );
 }
