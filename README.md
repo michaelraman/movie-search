@@ -1,5 +1,19 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
+## How to Setup/Run in Dev
+
+
+### Starting the front-end
+1. Navigate to the root directory of repository
+2. Run `npm install`
+3. Run `npm start`
+
+### Starting the back-end
+4. Ensure the OMDB_API_KEY environment variable is set to your API key
+5. Run `node server/server.js`
+
+By default, you can access the front-end at http://localhost:3000 and the back-end at http://localhost:4000. Visit http://localhost:3000 to view the web application.
+
 ## Available Scripts
 
 In the project directory, you can run:
