@@ -19,7 +19,7 @@ export const movieSlice = createSlice({
   // which detects changes to a "draft state" and produces a brand new
   // immutable state based off those changes
   reducers: {
-    // sets state appropriately based on result of retrieving movies using getMovies
+    // sets state after retrieving movies using getMovies
     // used for initial page of movies
     processMovies: (state, action) => {
       state.movies = action.payload.Search;
@@ -34,7 +34,7 @@ export const movieSlice = createSlice({
         state.pageInfo.numPages = parseInt(action.payload.totalResults / 10) + 1;
       }
     },
-    // sets state appropriately based on result of retrieving movies using getMoreMovies
+    // sets state after retrieving movies using getMoreMovies
     // used for each page of movies except first
     processMoreMovies: (state, action) => {
       state.movies = [...state.movies, ...action.payload.Search];
