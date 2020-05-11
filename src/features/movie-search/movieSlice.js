@@ -6,6 +6,9 @@ export const movieSlice = createSlice({
   initialState: {
     movies: [],
     error: false,
+    // resultsEmpty is true when getMovies has been called but returns no results, false otherwise
+    // Initially, it is false because getMovies has not yet been called
+    resultsEmpty: false,
   },
   reducers: {
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -15,6 +18,12 @@ export const movieSlice = createSlice({
     processMovies: (state, action) => {
       state.movies = action.payload;
       state.error = false;
+      state.resultsEmpty = false;
+    },
+    processNoMovies: state => {
+      state.movies = [];
+      state.error = false;
+      state.resultsEmpty = true;
     },
     getMoviesError: (state, action) => {
       state.error = action.payload;
@@ -28,7 +37,7 @@ export const movieSlice = createSlice({
   },
 });
 
-export const { processMovies, getMoviesError, clearError, deleteMovie } = movieSlice.actions;
+export const { processMovies, processNoMovies, getMoviesError, clearError, deleteMovie } = movieSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic.
 export const getMovies = searchTerm => dispatch => {
@@ -37,7 +46,7 @@ export const getMovies = searchTerm => dispatch => {
       if(response.data.Response === 'True') {
         dispatch(processMovies(response.data.Search));
       } else {
-        dispatch(processMovies([]));
+        dispatch(processNoMovies());
       }
     })
     .catch(error => {
@@ -50,5 +59,6 @@ export const getMovies = searchTerm => dispatch => {
 // the state.
 export const selectMovies = state => state.movie.movies;
 export const selectError = state => state.movie.error;
+export const selectResultsEmpty = state => state.movie.resultsEmpty;
 
 export default movieSlice.reducer;

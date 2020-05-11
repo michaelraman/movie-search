@@ -6,6 +6,7 @@ import {
   deleteMovie,
   selectMovies,
   selectError,
+  selectResultsEmpty,
 } from './movieSlice';
 import { MovieInfo } from './MovieInfo';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,11 +29,15 @@ const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
   },
+  text: {
+    margin: theme.spacing(3),
+  },
 }));
 
 export function MovieSearch() {
   const movies = useSelector(selectMovies);
   const error = useSelector(selectError);
+  const resultsEmpty = useSelector(selectResultsEmpty);
 
   const dispatch = useDispatch();
 
@@ -71,6 +76,11 @@ export function MovieSearch() {
         value={searchTerm}
         label="Search for a movie"
         onChange={e => setSearchTerm(e.target.value)}
+        onKeyPress={e => {
+          if (e.key === 'Enter') {
+            handleSubmit();
+          }
+        }}
       />
       <Button
         variant="contained"
@@ -121,18 +131,19 @@ export function MovieSearch() {
           >
             {
               movies.map((movie, i) => {
-                  return(
-                    <MovieInfo
-                      key = {i}
-                      title = {movie.Title}
-                      year = {movie.Year}
-                      poster = {movie.Poster}
-                      imdbID = {movie.imdbID}
-                      deleteMovie = {deleteMovieById}
-                    />
-                  )
-                })
+                return(
+                  <MovieInfo
+                    key = {i}
+                    title = {movie.Title}
+                    year = {movie.Year}
+                    poster = {movie.Poster}
+                    imdbID = {movie.imdbID}
+                    deleteMovie = {deleteMovieById}
+                  />
+                )
+              })
             }
+            {resultsEmpty && <div className={classes.text}>No movies found for your search</div>}
           </Grid>
       </div>
     </div>
