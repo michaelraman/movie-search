@@ -8,8 +8,8 @@ const axios = require('axios');
 app.use(express.static(publicPath));
 
 // The OMDb API is called from the server to avoid exposing the API key
-app.get('/getMovies/:searchTerm', function(req, res) {
-  axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${req.params.searchTerm}`)
+app.get('/getMovies/:searchTerm/:page', function(req, res) {
+  axios.get(`http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${req.params.searchTerm}&page=${req.params.page}`)
     .then(response => {
       res.send(response.data);
     })
